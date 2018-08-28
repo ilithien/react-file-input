@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import './file.css';
 
 export default class FileInput extends Component {
   constructor(props) {
@@ -11,24 +13,30 @@ export default class FileInput extends Component {
   }
 
   onLoad({ target }) {
-    const { files } = target;
-    if (files && files[0]) {
-       const reader = new FileReader();
+    const { files: [first, ...rest] } = target;
 
-       reader.onload = () => {
+    if (first) {
+       const reader = new FileReader();
+       reader.onload = (e) => {
            this.setState({
-             file: target.result
+             file: e.target.result
            })
        }
-       reader.readAsDataURL(files[0]);
+       reader.readAsDataURL(first);
      }
-   }
   }
 
   render() {
-    return <div>
-      <input type="file" onChange={this.onLoad} />
-      <img src="#" />
+    const { id = "react-file-input", label = `Choose a file...` } = this.props;
+    return <div className="react-file-input-wrapper">
+      <label className="file-label" htmlFor={id} >{label}</label>
+      <input type="file" id={id} className="hidden" onChange={this.onLoad} />
+      <img src={this.state.file} />
     </div>
   }
 }
+
+FileInput.propTypes = {
+  label: PropTypes.string,
+  id: PropTypes.string
+};

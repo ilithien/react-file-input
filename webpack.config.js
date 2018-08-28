@@ -7,8 +7,16 @@ module.exports = {
     filename: 'index.js',
     libraryTarget: 'commonjs2'
   },
+  mode: 'production',
   module: {
     rules: [
+      {
+       test: /\.css$/,
+       use: [
+         'style-loader',
+         'css-loader',
+       ],
+      },
       {
         test: /\.(js|jsx)$/,
         include: path.resolve(__dirname, 'src'),
